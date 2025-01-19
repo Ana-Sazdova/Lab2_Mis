@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../services/api_services.dart';
-
+import '../providers/favorites_provider.dart';
 
 class JokeTypeScreen extends StatelessWidget {
   final String jokeType;
@@ -26,9 +26,29 @@ class JokeTypeScreen extends StatelessWidget {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final joke = snapshot.data![index];
+                final isFavorite = context
+                    .watch<FavoritesProvider>()
+                    .isFavorite(joke);
+
                 return ListTile(
                   title: Text(joke['setup']),
                   subtitle: Text(joke['punchline']),
+                  trailing: IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : null,
+                    ),
+                    onPressed: () {
+                      final favoritesProvider =
+                      context.read<FavoritesProvider>();
+
+                      if (isFavorite) {
+                        favoritesProvider.removeFavorite(joke);
+                      } else {
+                        favoritesProvider.addFavorite(joke);
+                      }
+                    },
+                  ),
                 );
               },
             );

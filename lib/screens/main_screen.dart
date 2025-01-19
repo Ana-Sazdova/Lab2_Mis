@@ -27,12 +27,19 @@ class _MainScreenState extends State<MainScreen> {
         title: const Text("Joke Types"),
         actions: [
           IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.pushNamed(context, '/favorites');
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.sentiment_very_satisfied),
             onPressed: () {
               Navigator.pushNamed(context, '/random-joke');
             },
           ),
         ],
+
       ),
       body: FutureBuilder<List<String>>(
         future: _jokeTypes,
